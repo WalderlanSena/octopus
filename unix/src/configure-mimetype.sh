@@ -6,7 +6,7 @@ function copy_icon {
 }
 
 # Copy mimetypes
-cp mimetypes/w.xml /usr/share/mime/packages
+cp mimetypes/octopus.xml /usr/share/mime/packages
 
 copy_icon '16x16'
 copy_icon '32x32'
