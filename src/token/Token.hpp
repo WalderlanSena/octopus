@@ -16,6 +16,8 @@ class Token
 {
 public:
 	
+	std::string value;
+  	std::string type;
 	std::string keywords[KEYWORD_VALUE]{
 		"if",
 		"endif",
@@ -47,10 +49,6 @@ public:
 	int _Token_getLine();
 
 	void _Token_setLine(int line);
-
-	std::string value;
-  	
-  	std::string type;
 
 private:
  	int line;

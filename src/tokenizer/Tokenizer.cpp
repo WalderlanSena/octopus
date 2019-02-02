@@ -26,8 +26,8 @@ void Tokenizer::_Tokenizer_build()
 		
 		if ((int) currentChar == -1) {
 			Token octok;
-			octok._Token_setType("-1");
-			octok._Token_setValue("EOL");
+			octok._Token_setValue("-1");
+			octok._Token_setType("EOL");
 			tokens.push_back(octok);
 		}
 		
@@ -42,6 +42,8 @@ void Tokenizer::_Tokenizer_buildTokens(char currentChar)
 {
 	int nc = (int) this->_Tokenizer_nextChar();
 	int ic = (int) currentChar;
+	
+	Token t;
 
 	if ((( ic >= 32 )  && ( ic <= 47 )) || ((ic >= 58)    && ( ic <= 64)) ||
 		(( ic >= 91 )  && ( ic <= 94 )) || (( ic >= 123 ) && ( ic <= 126))) {
@@ -53,20 +55,18 @@ void Tokenizer::_Tokenizer_buildTokens(char currentChar)
 		this->tok += currentChar;
 	} else {
 		this->tok += currentChar;
-		if(isdigit(this->tok[0])){
-			Token t;
-			t._Token_setValue("INTEGER");
-			t._Token_setType(this->tok);
+		if (isdigit(this->tok[0])) {
+			t._Token_setType("INTEGER");
+			t._Token_setValue(this->tok);
 			tokens.push_back(t);
 		} else {
-			if (!this->_Tokenizer_checkKeyword(this->tok)){
-				Token t;
-				t._Token_setValue("IDENT");
-				t._Token_setType(this->tok);
+			if (!this->_Tokenizer_checkKeyword(this->tok)) {
+				t._Token_setType("IDENT");
+				t._Token_setValue(this->tok);
 				tokens.push_back(t);
-				}
 			}
-			this->tok = "";
+		}
+		this->tok = "";
 	}
 }
 
@@ -95,8 +95,8 @@ bool Tokenizer::_Tokenizer_checkKeyword(std::string tok)
 
 	for (int i = 0; i < KEYWORD_VALUE; i++) {
 		if (tok.compare(octok.keywords[i]) == 0) {
-			octok._Token_setValue(octok.keywords[i]);
-			octok._Token_setType(tok);
+			octok._Token_setType("KEYWORD");
+			octok._Token_setValue(tok);
 			tokens.push_back(octok);
 			this->tok = "";
 			return true;
@@ -115,279 +115,279 @@ void Tokenizer::_Tokenizer_symbolCheck(char currentChar)
 	bool flag = false;
 
 	switch (currentChar) {
-	case ':':
-		if (this->_Tokenizer_nextChar() == ':' ){
-			tk._Token_setValue("SCOPE_RESOLUTION");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+		case ':':
+			if (this->_Tokenizer_nextChar() == ':' ){
+				tk._Token_setType("SCOPE_RESOLUTION");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			tk._Token_setType("COLON");
+			tk._Token_setValue(this->tok);
 			break;
-		}
-		tk._Token_setValue("COLON");
-		tk._Token_setType(this->tok);
-		break;
-	case '+':
-		if (this->_Tokenizer_nextChar() == '+' ){
-			tk._Token_setValue("INCREMENT");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+		case '+':
+			if (this->_Tokenizer_nextChar() == '+' ){
+				tk._Token_setType("INCREMENT");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			if (this->_Tokenizer_nextChar() == '=' ) {
+				tk._Token_setType("ASSIGN_SUM");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			tk._Token_setType("ADD");
+			tk._Token_setValue(this->tok);
 			break;
-		}
-		if (this->_Tokenizer_nextChar() == '=' ) {
-			tk._Token_setValue("ASSIGN_SUM");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+		case '-':
+			if (this->_Tokenizer_nextChar() == '-' ) {
+				tk._Token_setType("DECREMENT");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			} 
+			if (this->_Tokenizer_nextChar() == '=' ) {
+				tk._Token_setType("ASSIGN_DIFF");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			if (this->_Tokenizer_nextChar() == '>' ) {
+				tk._Token_setType("ELEMPOINTER");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			if (this->_Tokenizer_nextChar() == '*' ) {
+				tk._Token_setType("POINTERTOMEMB");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			tk._Token_setType("SUBTRACT");
+			tk._Token_setValue(this->tok);
 			break;
-		}
-		tk._Token_setValue("ADD");
-		tk._Token_setType(this->tok);
-		break;
-	case '-':
-		if (this->_Tokenizer_nextChar() == '-' ) {
-			tk._Token_setValue("DECREMENT");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+		case '(':
+			tk._Token_setType("LPAREN");
+			tk._Token_setValue(this->tok);
 			break;
-		} 
-		if (this->_Tokenizer_nextChar() == '=' ) {
-			tk._Token_setValue("ASSIGN_DIFF");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+		case ')':
+			tk._Token_setType("RPAREN");
+			tk._Token_setValue(this->tok);
 			break;
-		}
-		if (this->_Tokenizer_nextChar() == '>' ) {
-			tk._Token_setValue("ELEMPOINTER");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+		case '[':
+			tk._Token_setType("LBPAREN");
+			tk._Token_setValue(this->tok);
 			break;
-		}
-		if (this->_Tokenizer_nextChar() == '*' ) {
-			tk._Token_setValue("POINTERTOMEMB");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+		case ']':
+			tk._Token_setType("RBPAREN");
+			tk._Token_setValue(this->tok);
 			break;
-		}
-		tk._Token_setValue("SUBTRACT");
-		tk._Token_setType(this->tok);
-		break;
-	case '(':
-		tk._Token_setValue("LPAREN");
-		tk._Token_setType(this->tok);
-		break;
-	case ')':
-		tk._Token_setValue("RPAREN");
-		tk._Token_setType(this->tok);
-		break;
-	case '[':
-		tk._Token_setValue("LBPAREN");
-		tk._Token_setType(this->tok);
-		break;
-	case ']':
-		tk._Token_setValue("RBPAREN");
-		tk._Token_setType(this->tok);
-		break;
-	case '{':
-		tk._Token_setValue("LSPAREN");
-		tk._Token_setType(this->tok);
-		break;
-	case '}':
-		tk._Token_setValue("RSPAREN");
-		tk._Token_setType(this->tok);
-		break;
-	case '.':
-		if (this->_Tokenizer_nextChar() == '*' ) {
-			tk._Token_setValue("POINTERTOMEMBER");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+		case '{':
+			tk._Token_setType("LSPAREN");
+			tk._Token_setValue(this->tok);
 			break;
-		}
-		tk._Token_setValue("ELEMREF");
-		tk._Token_setType(this->tok);
-		break;
-	case '!':
-		if (this->_Tokenizer_nextChar() == '=' ){
-			tk._Token_setValue("NOT_EQ");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+		case '}':
+			tk._Token_setType("RSPAREN");
+			tk._Token_setValue(this->tok);
 			break;
-		}
-		tk._Token_setValue("NOT");
-		tk._Token_setType(this->tok);
-		break;
-	case '~':
-		tk._Token_setValue("BITWISE_NOT");
-		tk._Token_setType(this->tok);
-		break;
-	case '*':
-		if (this->_Tokenizer_nextChar() == '=' ){
-			tk._Token_setValue("ASSIGN_PROD");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
-		break;
-		}
-		tk._Token_setValue("MULT");
-		tk._Token_setType(this->tok);
-		break;
-	case '&':
-		if (this->_Tokenizer_nextChar() == '&') {
-			tk._Token_setValue("LOGICAL_AND");
-			tk._Token_setType(tok + this->_Tokenizer_getChar());
+		case '.':
+			if (this->_Tokenizer_nextChar() == '*' ) {
+				tk._Token_setType("POINTERTOMEMBER");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			tk._Token_setType("ELEMREF");
+			tk._Token_setValue(this->tok);
 			break;
-		}
-		if (this->_Tokenizer_nextChar() == '=') {
-			tk._Token_setValue("BITWISE_AND_ASSIGN");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+		case '!':
+			if (this->_Tokenizer_nextChar() == '=' ){
+				tk._Token_setType("NOT_EQ");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			tk._Token_setType("NOT");
+			tk._Token_setValue(this->tok);
 			break;
-		}
-		tk._Token_setValue("BITWISE_AND");
-		tk._Token_setType(this->tok);
-		break;
-	case '/':
-		if (this->_Tokenizer_nextChar() == '=' ) {
-			tk._Token_setValue("ASSIGN_QUOTIENT");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+		case '~':
+			tk._Token_setType("BITWISE_NOT");
+			tk._Token_setValue(this->tok);
 			break;
-		} 
-		
-		if (this->_Tokenizer_nextChar() == '*' ){
+		case '*':
+			if (this->_Tokenizer_nextChar() == '=' ){
+				tk._Token_setType("ASSIGN_PROD");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+			break;
+			}
+			tk._Token_setType("MULT");
+			tk._Token_setValue(this->tok);
+			break;
+		case '&':
+			if (this->_Tokenizer_nextChar() == '&') {
+				tk._Token_setType("LOGICAL_AND");
+				tk._Token_setValue(tok + this->_Tokenizer_getChar());
+				break;
+			}
+			if (this->_Tokenizer_nextChar() == '=') {
+				tk._Token_setType("BITWISE_AND_ASSIGN");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			tk._Token_setType("BITWISE_AND");
+			tk._Token_setValue(this->tok);
+			break;
+		case '/':
+			if (this->_Tokenizer_nextChar() == '=' ) {
+				tk._Token_setType("ASSIGN_QUOTIENT");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			} 
 			
-			bool invar = true;
+			if (this->_Tokenizer_nextChar() == '*' ){
+				
+				bool invar = true;
 
-			while (invar) {
-				if (this->_Tokenizer_nextChar() == '*' ){
-					this->_Tokenizer_getChar();
-					if (this->_Tokenizer_nextChar() == '/' ){
+				while (invar) {
+					if (this->_Tokenizer_nextChar() == '*' ){
 						this->_Tokenizer_getChar();
-						invar = false;
-						flag = true;
+						if (this->_Tokenizer_nextChar() == '/' ){
+							this->_Tokenizer_getChar();
+							invar = false;
+							flag = true;
+						}
+					} else {
+						this->_Tokenizer_getChar();
 					}
-				} else {
-					this->_Tokenizer_getChar();
 				}
 			}
-		}
-		if (this->_Tokenizer_nextChar() == '/' ){
+			if (this->_Tokenizer_nextChar() == '/' ){
 
-			while(this->_Tokenizer_nextChar() != '\n' && this->_Tokenizer_nextChar() != '\r' ){
-				this->_Tokenizer_getChar();
+				while(this->_Tokenizer_nextChar() != '\n' && this->_Tokenizer_nextChar() != '\r' ){
+					this->_Tokenizer_getChar();
+				}
+				flag = true;
+			}
+			
+			tk._Token_setType("DIVISION");
+			tk._Token_setValue(this->tok);
+			break;
+		case '\\':
+			if (this->_Tokenizer_nextChar() == 'n' ){
+				tk._Token_setType("NEW_LINE");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			if (this->_Tokenizer_nextChar() == 't' ) {
+				tk._Token_setType("HORZ_TAB");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			if (this->_Tokenizer_nextChar() == 'r' ){
+				tk._Token_setType("CARRIAGE_RETURN");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			break;
+		case '%':
+			if (this->_Tokenizer_nextChar() == '=' ){
+				tk._Token_setType("ASSIGN_REMAINDER");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			tk._Token_setType("REMAINDER");
+			tk._Token_setValue(this->tok);
+			break;
+		case '<':
+			if (this->_Tokenizer_nextChar() == '<' ){
+				tk._Token_setType("LSHIFT");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				if (this->_Tokenizer_nextChar() == '=' ){
+					tk._Token_setType("LSHIFT_ASSIGN");
+					tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				}
+				break;
+			}
+			if (this->_Tokenizer_nextChar() == '=' ){
+				tk._Token_setType("LESS_EQ");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			
+			tk._Token_setType("LESS");
+			tk._Token_setValue(this->tok);
+			break;
+		case '>':
+			if (this->_Tokenizer_nextChar() == '>' ){
+				tk._Token_setType("RSHIFT");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+
+				if (this->_Tokenizer_nextChar() == '=' ){
+					tk._Token_setType("RSHIFT_ASSIGN");
+					tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				}
+				break;
+			}
+			if (this->_Tokenizer_nextChar() == '=' ){
+				tk._Token_setType("GREATER_EQ");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			tk._Token_setType("GREATER");
+			tk._Token_setValue(this->tok);
+			break;
+		case '=':
+			if (this->_Tokenizer_nextChar() == '=' ){
+				tk._Token_setType("EQUIVALENCE");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			tk._Token_setType("EQUAL");
+			tk._Token_setValue(this->tok);
+			break;
+		case '^':
+			if (this->_Tokenizer_nextChar() == '=' ){
+				tk._Token_setType("BITWISE_XOR_ASSIGN");
+				tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			tk._Token_setType("XOR");
+			tk._Token_setValue(this->tok);
+			break;
+		case '|':
+			if (this->_Tokenizer_nextChar() == '|' ){
+				tk._Token_setType("LOGICAL_OR");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}
+			if (this->_Tokenizer_nextChar() == '=' ) {
+				tk._Token_setType("BITWISE_OR_ASSIGN");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
+			}	
+			tk._Token_setType("BITWISE_OR");
+			tk._Token_setValue(this->tok);
+			break;
+		case '?':
+			if (this->_Tokenizer_nextChar() == ':' ){
+				tk._Token_setType("TERNARY_COND");
+				tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
+				break;
 			}
 			flag = true;
-		}
-		
-		tk._Token_setValue("DIVISION");
-		tk._Token_setType(this->tok);
-		break;
-	case '\\':
-		if (this->_Tokenizer_nextChar() == 'n' ){
-			tk._Token_setValue("NEW_LINE");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
 			break;
-		}
-		if (this->_Tokenizer_nextChar() == 't' ) {
-			tk._Token_setValue("HORZ_TAB");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+		case ',':
+			tk._Token_setType("COMMA");
+			tk._Token_setValue(this->tok);
 			break;
-		}
-		if (this->_Tokenizer_nextChar() == 'r' ){
-			tk._Token_setValue("CARRIAGE_RETURN");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+		case ';':
+			tk._Token_setType("SEMICOLON");
+			tk._Token_setValue(this->tok);
 			break;
-		}
-		break;
-	case '%':
-		if (this->_Tokenizer_nextChar() == '=' ){
-			tk._Token_setValue("ASSIGN_REMAINDER");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
+		case '\"':
+			tk._Token_setType("DOUBLE_QUOTE");
+			tk._Token_setValue(this->tok);
 			break;
-		}
-		tk._Token_setValue("REMAINDER");
-		tk._Token_setType(this->tok);
-		break;
-	case '<':
-		if (this->_Tokenizer_nextChar() == '<' ){
-			tk._Token_setValue("LSHIFT");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
-			if (this->_Tokenizer_nextChar() == '=' ){
-				tk._Token_setValue("LSHIFT_ASSIGN");
-				tk._Token_setType(this->tok + this->_Tokenizer_getChar());
-			}
+		case '\'':
+			tk._Token_setType("SINGLE_QUOTE");
+			tk._Token_setValue(this->tok);
 			break;
-		}
-		if (this->_Tokenizer_nextChar() == '=' ){
-			tk._Token_setValue("LESS_EQ");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
-			break;
-		}
-		
-		tk._Token_setValue("LESS");
-		tk._Token_setType(this->tok);
-		break;
-	case '>':
-		if (this->_Tokenizer_nextChar() == '>' ){
-			tk._Token_setValue("RSHIFT");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
-
-			if (this->_Tokenizer_nextChar() == '=' ){
-				tk._Token_setValue("RSHIFT_ASSIGN");
-				tk._Token_setType(this->tok + this->_Tokenizer_getChar());
-			}
-			break;
-		}
-		if (this->_Tokenizer_nextChar() == '=' ){
-			tk._Token_setValue("GREATER_EQ");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
-			break;
-		}
-		tk._Token_setValue("GREATER");
-		tk._Token_setType(this->tok);
-		break;
-	case '=':
-		if (this->_Tokenizer_nextChar() == '=' ){
-			tk._Token_setValue("EQUIVALENCE");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
-			break;
-		}
-		tk._Token_setValue("EQUAL");
-		tk._Token_setType(this->tok);
-		break;
-	case '^':
-		if (this->_Tokenizer_nextChar() == '=' ){
-			tk._Token_setValue("BITWISE_XOR_ASSIGN");
-			tk._Token_setValue(this->tok + this->_Tokenizer_getChar());
-			break;
-		}
-		tk._Token_setValue("XOR");
-		tk._Token_setType(this->tok);
-		break;
-	case '|':
-		if (this->_Tokenizer_nextChar() == '|' ){
-			tk._Token_setValue("LOGICAL_OR");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
-			break;
-		}
-		if (this->_Tokenizer_nextChar() == '=' ) {
-			tk._Token_setValue("BITWISE_OR_ASSIGN");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
-			break;
-		}	
-		tk._Token_setValue("BITWISE_OR");
-		tk._Token_setType(this->tok);
-		break;
-	case '?':
-		if (this->_Tokenizer_nextChar() == ':' ){
-			tk._Token_setValue("TERNARY_COND");
-			tk._Token_setType(this->tok + this->_Tokenizer_getChar());
-			break;
-		}
-		flag = true;
-		break;
-	case ',':
-		tk._Token_setValue("COMMA");
-		tk._Token_setType(this->tok);
-		break;
-	case ';':
-		tk._Token_setValue("SEMICOLON");
-		tk._Token_setType(this->tok);
-		break;
-	case '\"':
-		tk._Token_setValue("DOUBLE_QUOTE");
-		tk._Token_setType(this->tok);
-		break;
-	case '\'':
-		tk._Token_setValue("SINGLE_QUOTE");
-		tk._Token_setType(this->tok);
-		break;
-	default:
-		flag = true;
+		default:
+			flag = true;
 		break;
 
 	}
@@ -399,13 +399,12 @@ void Tokenizer::_Tokenizer_symbolCheck(char currentChar)
 
 void Tokenizer::printTokenList()
 {
-	
 	std::cout << "\nTokens:\n\n";
     
 	for( int i = 0; i < tokens.size(); i++) {
 		std::string num;
 		num = tokens[i]._Token_getValue();
-		std::cout << tokens[i]._Token_getValue() << "\t\t\t->\t" << tokens[i]._Token_getType() << std::endl;
+		std::cout << tokens[i]._Token_getType() << "\t\t\t->\t" << tokens[i]._Token_getValue() << std::endl;
 	}
 
 }
