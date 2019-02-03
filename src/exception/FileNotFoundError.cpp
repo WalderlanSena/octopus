@@ -13,7 +13,7 @@
  */
 #include "FileNotFoundError.hpp"
 
-void FileNotFoundError::verify(char *file)
+void FileNotFoundError::execute(char *file)
 {
 	std::cerr << termcolor::bold << "octopus:" << termcolor::red 
 			  << " fatal error: " 

@@ -11,22 +11,16 @@
  * @license: https://github.com/WalderlanSena/octopus/blob/master/LICENSE
  * @version: v0.0.1
  */
-#ifndef _LEXER_
-#define _LEXER_
+#ifndef _OUTPUT_STATEMENT_
+#define _OUTPUT_STATEMENT_
 
-#include <string>
-#include <vector>
-#include "../token/Token.hpp"
+#include <iostream>
+#include "../../tokenizer/Tokenizer.hpp"
 
-class Lexer 
-{	
+class OutputStatement
+{
 public:
-	
-	std::vector<Token>tokens;
-
-	std::string tok;
-	
-	bool _Lexer_checkKeyword(std::string tok);
+    OutputStatement(Tokenizer &tokenizer);
 };
 
 #endif

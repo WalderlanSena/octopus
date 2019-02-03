@@ -20,7 +20,7 @@
 class FileNotFoundError
 {
 public:
-	static void verify(char *file);
+	static void execute(char *file);
 };
 
 #endif

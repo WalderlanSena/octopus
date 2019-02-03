@@ -1,3 +1,16 @@
+/**
+ * Octopus Compiler and toolkit
+ * Copyright (C) 2018-2019 Octopus and CONTRIBUTORS
+ *
+ * This file is part of Octopus.
+ *
+ * Octopus is free software: you can redistribute it and/or modify
+ * it under the terms of the MIT
+ *
+ * @author: Walderlan Sena <senawalderlan@gmail.com>
+ * @license: https://github.com/WalderlanSena/octopus/blob/master/LICENSE
+ * @version: v0.0.1
+ */
 #ifndef _TOKENIZER_
 #define _TOKENIZER_
 
@@ -8,8 +21,9 @@
 #include <string>
 #include <cstring>
 #include "../token/Token.hpp"
+#include "../lexer/Lexer.hpp"
 
-class Tokenizer
+class Tokenizer : public Lexer
 {
 public:
 
@@ -25,7 +39,7 @@ public:
 
 	void _Tokenizer_symbolCheck(char currentChar);	
 
-	bool _Tokenizer_checkKeyword(std::string tok);
+	// bool _Tokenizer_checkKeyword(std::string tok);
 
 	void printTokenList();
 
@@ -37,11 +51,6 @@ private:
 	
 	std::fstream file;
 
-	std::string tok;
-	
-	std::map <std::string, std::string> tokenTable;
-
-	std::vector<Token>tokens;
 };
 
 #endif

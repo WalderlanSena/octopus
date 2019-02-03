@@ -12,12 +12,16 @@
  * @version: v0.0.1
  */
 #include "tokenizer/Tokenizer.hpp"
+#include "parser/Parse.hpp"
 
 int main(int argc, char *argv[])
 {
 	Tokenizer program(argv[1]);
+	Parse stmt;
+
 	program._Tokenizer_build();
 	program.printTokenList();
+	stmt.match(program);
 
 	return 0;
 }
