@@ -26,7 +26,9 @@ Tokenizer::Tokenizer(char *fileName)
 void Tokenizer::_Tokenizer_build()
 {
 	char currentChar;
-	
+	int line   = 1;
+	int column = 0;
+
 	this->file.open(this->fileName, std::fstream::in);
 	
 	if (!this->file.is_open()) {
@@ -37,10 +39,18 @@ void Tokenizer::_Tokenizer_build()
 		
 		currentChar = this->file.get();
 		
+		column++;
+		this->token._Token_setColumn(column);
+
 		if ((int) currentChar == -1) {
 			this->token._Token_setValue("-1");
 			this->token._Token_setType("EOL");
 			tokens.push_back(this->token);
+		}
+
+		if (currentChar == '\n') {
+			line++;	
+			this->token._Token_setLine(line);
 		}
 		
 		if ((int) currentChar != -1 && currentChar != '\n' && currentChar != '\r' && currentChar != '\t') {

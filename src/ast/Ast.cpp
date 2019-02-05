@@ -11,18 +11,4 @@
  * @license: https://github.com/WalderlanSena/octopus/blob/master/LICENSE
  * @version: v0.0.1
  */
-#ifndef _OUTPUT_STATEMENT_
-#define _OUTPUT_STATEMENT_
-
-#include <iostream>
-#include "../../tokenizer/Tokenizer.hpp"
-
-class OutputStatement
-{
-public:
-    OutputStatement(Tokenizer &tokenizer);
-
-    void execute();
-};
-
-#endif
+#include "Ast.hpp"

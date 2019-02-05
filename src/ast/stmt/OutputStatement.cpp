@@ -27,3 +27,8 @@ OutputStatement::OutputStatement(Tokenizer &tokenizer)
 
     std::cout << outputData << std::endl;
 }
+
+void execute()
+{
+    
+}
