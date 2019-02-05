@@ -21,7 +21,7 @@ print "Hello World"
 
 #### Vim
 
-Octopus syntax support to Vim's built-in editor [octopus/editor/vim/octopus.vim](https://github.com/walderlansena)
+Octopus syntax support to Vim's built-in editor [resource/editor/vim/syntax/octopus.vim](https://github.com/WalderlanSena/octopus/blob/master/resource/editor/vim/syntax/octopus.vim)
 
 # License
 <strong>Octopus</strong> is free software you can redistribute it and/or modify it under the terms of the <a href="https://github.com/WalderlanSena/octopus/blob/master/LICENSE">MIT</a>
