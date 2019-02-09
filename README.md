@@ -3,6 +3,7 @@
   <br/>
   <img src="https://github.com/WalderlanSena/tagsGit/blob/master/octopus.svg">
   <img src="https://github.com/WalderlanSena/tagsGit/blob/master/licenseMIT.svg">
+ <img src="https://github.com/WalderlanSena/tagsGit/blob/master/octopus-lang.svg">
 </p>
 
 # About Octopus
