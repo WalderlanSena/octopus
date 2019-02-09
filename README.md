@@ -2,7 +2,9 @@
   <img src="https://github.com/WalderlanSena/octopus/blob/master/resource/octopus-logo-lg.png" width="700">
   <br/>
   <img src="https://github.com/WalderlanSena/tagsGit/blob/master/octopus.svg">
-  <img src="https://github.com/WalderlanSena/tagsGit/blob/master/licenseMIT.svg">
+  <a href="https://github.com/WalderlanSena/octopus/blob/master/LICENSE">
+    <img src="https://github.com/WalderlanSena/tagsGit/blob/master/licenseMIT.svg">
+  </a>
  <img src="https://github.com/WalderlanSena/tagsGit/blob/master/octopus-lang.svg">
 </p>
 
